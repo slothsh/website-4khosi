@@ -49,6 +49,22 @@
         return array; 
     }; 
 
+    $: preloadImageUrls = [
+        Heart,
+        Ladybug,
+        Tiara,
+        Afro,
+        Melody,
+        Crash,
+        Couple,
+        Saxophone,
+        Languages,
+        Bibimbap,
+        CrossMark,
+        CheckMark,
+        Reset,
+    ];
+
     const poems: Poem[]  = shuffle(JSON.parse(PoemsData));
     const answeredPoems: { [key: number]: [Poem, Answer] } = [];
     poems.forEach((poem) => {
@@ -205,10 +221,15 @@
 </script>
 
 <!-- <svelte:window on:click={cyclePoem}></svelte:window> -->
+<svelte:head>
+    {#each preloadImageUrls as image}
+        <link rel="preload" as="image" href={image}>
+    {/each}
+</svelte:head>
 <div id="backgroundMain" class="fill-screen"></div>
 <div id="moolaCounter">
     <!-- <a id="moolaValue" href="">R{totalMoola.toPrecision(3)}</a> -->
-    <a id="moolaValue" href="">Coupons:</a>
+    <a id="moolaValue" href="">Tokens:</a>
     <div class="moola-pouch">
     {#each { length: totalCoins } as i}
         <img class="moola-coin" src={Coin} alt="coin">
