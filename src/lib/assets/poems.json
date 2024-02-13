@@ -1,0 +1,72 @@
+[
+    {
+        "title": "Makhosazana's Grace",
+        "poem": "In her presence, I feel like royalty,\nHer love, a crown upon my heart,\nMakhosazana, my princess divine,\nIn every moment, we'll never part.",
+        "icon": "tiara.png",
+        "alt": "tiara",
+        "answer": true
+    },
+    {
+        "title": "Hair and Heart",
+        "poem": "Time dances as she tends to her hair,\nEach strand a testament to her care,\nThough it takes forever, her beauty's rare,\nMy love for Khosi, beyond compare.",
+        "icon": "afro.png",
+        "alt": "afro",
+        "answer": true
+    },
+    {
+        "title": "Melodic Love",
+        "poem": "In the rhythm of her laughter,\nAnd the melody of her voice,\nKhosi orchestrates our love story,\nIn every beat, we rejoice.",
+        "icon": "melody.png",
+        "alt": "melody notes",
+        "answer": false
+    },
+    {
+        "title": "Driving Me Crazy",
+        "poem": "She can't drive, but she steers my heart,\nThrough the winding roads of love's sweet art,\nWith Khosi, every journey's a start,\nIn her arms, I find my part.",
+        "icon": "crash.png",
+        "alt": "crashing cars",
+        "answer": false
+    },
+    {
+        "title": "Dance of Fear",
+        "poem": "Her moves on the floor, a sight to behold,\nYet when she dances, my heart turns cold,\nFor in her grace, a fear untold,\nBut in her arms, my fears unfold.",
+        "icon": "couple.png",
+        "alt": "couple dancing",
+        "answer": true
+    },
+    {
+        "title": "Saxophone Serenade",
+        "poem": "Khosi plays the sax, her notes so sweet,\nIn her music, our love finds its beat,\nWith every tune, my heart's complete,\nIn her melodies, our love's discreet.",
+        "icon": "saxophone.png",
+        "alt": "saxophone",
+        "answer": false
+    },
+    {
+        "title": "Language of Love",
+        "poem": "In Korean whispers, our love takes flight,\nKhosi's words, a symphony of delight,\nThough Xhosa fades, in love's pure light,\nOur bond remains, steadfast and bright.",
+        "icon": "languages.png",
+        "alt": "book of languages",
+        "answer": true
+    },
+    {
+        "title": "Insect Fears",
+        "poem": "Insects scare her, a quirk so dear,\nYet in her eyes, I see no fear,\nFor in her love, I find my cheer,\nWith Khosi near, all worries clear.",
+        "icon": "ladybug.png",
+        "alt": "ladybug",
+        "answer": false
+    },
+    {
+        "title": "Kimchi Love",
+        "poem": "With kimchi's spice, her love ignites,\nEach bite a journey to new heights,\nIn Khosi's kitchen, love takes flight,\nWith every taste, my heart delights.",
+        "icon": "bibimbap.png",
+        "alt": "bowl of bibimbap",
+        "answer": false
+    },
+    {
+        "title": "Happiness Unveiled",
+        "poem": "In her smile, happiness finds its home,\nWith Khosi, joy's seeds are sown,\nIn her love, I'm never alone,\nFor with her, my heart has grown.",
+        "icon": "heart.png",
+        "alt": "heart",
+        "answer": true        
+    }
+]
