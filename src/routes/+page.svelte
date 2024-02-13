@@ -19,6 +19,7 @@
     import Bibimbap from "$lib/assets/bibimbap.png"
     import CrossMark from "$lib/assets/cross.png"
     import CheckMark from "$lib/assets/heart.png"
+    import Reset from "$lib/assets/reset.png"
 
     enum CycleDirection {
         Left = -1,
@@ -28,6 +29,7 @@
     enum Answer {
         No = 0,
         Yes,
+        Unanswered,
     }
 
     interface Poem {
@@ -48,7 +50,7 @@
     }; 
 
     const poems: Poem[]  = shuffle(JSON.parse(PoemsData));
-    const answeredPoems: [Poem, Answer][] = [];
+    const answeredPoems: { [key: number]: [Poem, Answer] } = [];
     poems.forEach((poem) => {
         poem.claimed = false;
     });
@@ -59,9 +61,11 @@
 
     const maxMoola = 150.0;
     const correctPoemMoola = (maxMoola / totalCorrectPoems);
-    let totalMoola = 0.00;
-    let totalCoins = 0;
-    let currentPoem = 0;
+    $: totalMoola = 0.00;
+    $: totalCoins = 0;
+    $: currentPoem = 0;
+    $: buttonAnswerStyleAffirmative = "unanswered";
+    $: buttonAnswerStyleNegative = "unanswered";
 
     let showIcon = false;
     const toggleTitle = (to: number) => {
@@ -80,7 +84,6 @@
                 opacity: 1,
                 easing: "easeInSine",
             });
-
             anime({
                 targets: ".toggle-anim",
                 translateY: -24,
@@ -114,10 +117,30 @@
         }
     }
 
+    const toggleButtons = () => {
+        if (currentPoem in answeredPoems) {
+            buttonAnswerStyleAffirmative = (answeredPoems[currentPoem][1] === Answer.Yes && answeredPoems[currentPoem][0].answer)
+                ? "correct-answer"
+                : (answeredPoems[currentPoem][1] === Answer.Yes && !answeredPoems[currentPoem][0].answer)
+                    ? "wrong-answer"
+                    : "locked-answer";
+
+            buttonAnswerStyleNegative = (answeredPoems[currentPoem][1] === Answer.Yes && answeredPoems[currentPoem][0].answer)
+                ? "locked-answer"
+                : (answeredPoems[currentPoem][1] === Answer.Yes && !answeredPoems[currentPoem][0].answer)
+                    ? "locked-answer"
+                    : "correct-answer";
+        } else {
+            buttonAnswerStyleAffirmative = "unanswered";
+            buttonAnswerStyleNegative = "unanswered";
+        }
+    };
+
     const cyclePoem = (direction: CycleDirection) => {
         const tmp = currentPoem;
         currentPoem = Math.max(0, Math.min(currentPoem + direction, poems.length - 1));
         toggleTitle(tmp);
+        toggleButtons();
     }
 
     const resolveIcon = (name: string) => {
@@ -147,11 +170,12 @@
         }
 
         if (!poems[currentPoem].claimed) {
-            answeredPoems.push([poems[currentPoem], answer]);
+            answeredPoems[currentPoem] = [poems[currentPoem], answer];
         }
 
+        console.log(answeredPoems);
+        toggleButtons();
         poems[currentPoem].claimed = true;
-        console.log(answeredPoems.length);
     }
 
     const resetResults = () => {
@@ -160,6 +184,11 @@
         poems.forEach((poem) => {
             poem.claimed = false;
         });
+        for (const key in answeredPoems) {
+            delete answeredPoems[key];
+        }
+        buttonAnswerStyleAffirmative = "unanswered";
+        buttonAnswerStyleNegative = "unanswered";
     }
 
     onMount(() => {
@@ -189,14 +218,14 @@
 <div id="siteTitle">
     <a href="">Stevey x Khosi</a>
 </div>
-<div id="answeredPoemsContainer">
-{#each answeredPoems as [poem, answer]}
-    <div class="answer-poem-item">
-        <p>{poem.title}</p>
-        <img src={(answer === Answer.Yes && poem.answer) ? CheckMark : CrossMark } alt="check mark">
-    </div>
-{/each}
-</div>
+<!-- <div id="answeredPoemsContainer"> -->
+<!-- {#each answeredPoems as [poem, answer]} -->
+<!--     <div class="answer-poem-item"> -->
+<!--         <p>{poem.title}</p> -->
+<!--         <img src={(answer === Answer.Yes && poem.answer) ? CheckMark : CrossMark } alt="check mark"> -->
+<!--     </div> -->
+<!-- {/each} -->
+<!-- </div> -->
 <section id="sectionMain" class="fill-screen">
     <div id="iconContainer">
     {#if showIcon}
@@ -210,8 +239,11 @@
     </div>
     <div class="divider"></div>
     <div id="textContainer">
-        <h2 class="anim-01 text-item">4 Khosi</h2>
-        <p class="anim-01 text-item">Stevey x Khosi</p>
+        <a on:click|preventDefault={resetResults} id="resetButtonContainer" href="" class="poem-arrow">
+            <img id="resetButton" src={Reset} alt="reset">
+        </a>
+        <!-- <h2 class="anim-01 text-item">4 Khosi</h2> -->
+        <!-- <p class="anim-01 text-item">Stevey x Khosi</p> -->
     </div>
     <div id="poemNavigator">
         <img on:click|preventDefault={() => cyclePoem(CycleDirection.Left)} id="leftPoemArrow" src={Arrow} alt="arrow" class="poem-arrow flip">
@@ -224,8 +256,8 @@
         <img on:click|preventDefault={() => cyclePoem(CycleDirection.Right)} id="rightPoemArrow" src={Arrow} alt="arrow" class="poem-arrow">
     </div>
     <div id="buttonContainer">
-        <button on:click|preventDefault={() => checkResult(Answer.Yes)}>Yeah, it's AI</button>
-        <button on:click|preventDefault={() => checkResult(Answer.No)}>Nah, Stevey wrote that</button>
+        <button class={buttonAnswerStyleAffirmative} on:click|preventDefault={() => checkResult(Answer.Yes)}>Yeah, it's AI</button>
+        <button class={buttonAnswerStyleNegative} on:click|preventDefault={() => checkResult(Answer.No)}>Nah, Stevey wrote that</button>
     </div>
 </section>
 
@@ -264,6 +296,17 @@
 
     #sectionPoem > h3 {
         margin-bottom: 1rem;
+    }
+
+    #resetButtonContainer {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 48px;
+    }
+
+    #resetButton {
+        width: 32px;
     }
 
     #textContainer {
@@ -426,10 +469,23 @@
         transition: all 300ms ease-in-out;
     }
 
-    button:hover {
+    button.correct-answer {
+        background-color: #77FF77;
+    }
+
+    button.wrong-answer {
+        background-color: #FF7777;
+    }
+
+    button.locked-answer {
+        background-color: #AAAAAA;
+    }
+
+    button.unanswered:hover {
         transform: scale(1.2);
         margin: 0 2rem 0 2rem;
         background-color: #FFCA59;
         box-shadow: 0px 0px 20px #00000033;
     }
+
 </style>
