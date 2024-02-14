@@ -141,11 +141,11 @@
                     ? "wrong-answer"
                     : "locked-answer";
 
-            buttonAnswerStyleNegative = (answeredPoems[currentPoem][1] === Answer.Yes && answeredPoems[currentPoem][0].answer)
-                ? "locked-answer"
-                : (answeredPoems[currentPoem][1] === Answer.Yes && !answeredPoems[currentPoem][0].answer)
-                    ? "locked-answer"
-                    : "correct-answer";
+            buttonAnswerStyleNegative = (answeredPoems[currentPoem][1] === Answer.No && !answeredPoems[currentPoem][0].answer)
+                ? "correct-answer"
+                : (answeredPoems[currentPoem][1] === Answer.No && answeredPoems[currentPoem][0].answer)
+                    ? "wrong-answer"
+                    : "locked-answer";
         } else {
             buttonAnswerStyleAffirmative = "unanswered";
             buttonAnswerStyleNegative = "unanswered";
@@ -180,7 +180,8 @@
     }
 
     const checkResult = (answer: Answer) => {
-        if (answer === Answer.Yes && poems[currentPoem].answer && !poems[currentPoem].claimed) {
+        if (((answer === Answer.Yes && poems[currentPoem].answer) || (answer === Answer.No && !poems[currentPoem].answer))
+            && !poems[currentPoem].claimed) {
             totalMoola = Math.max(0, Math.min(totalMoola + correctPoemMoola, maxMoola));
             totalCoins = Math.floor(totalMoola / (maxMoola / 5));
         }
